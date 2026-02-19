@@ -1,0 +1,13 @@
+rule: BOLA-001
+name: "Broken Object Level Authorization"
+severity: high
+target:
+  path_pattern: "/users/{userId}"
+  methods: [GET, PUT]
+mutations:
+  - type: parameter_swap
+    target: path.userId
+    strategy: increment
+detection:
+  - status_code: 200
+    body_contains: "email"

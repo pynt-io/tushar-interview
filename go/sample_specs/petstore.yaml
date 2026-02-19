@@ -1,0 +1,32 @@
+openapi: "3.0.3"
+info:
+  title: "Radware Demo Store API"
+  version: "1.0.0"
+paths:
+  /users/{userId}:
+    get:
+      operationId: getUser
+      summary: Get user profile
+    put:
+      operationId: updateUser
+      summary: Update user profile
+  /users/{userId}/orders:
+    get:
+      operationId: getUserOrders
+      summary: Get user orders
+  /admin/dashboard:
+    get:
+      operationId: adminDashboard
+      summary: Admin dashboard
+  /admin/users:
+    get:
+      operationId: adminListUsers
+      summary: List all users
+  /products:
+    get:
+      operationId: listProducts
+      summary: List products
+  /products/{productId}:
+    get:
+      operationId: getProduct
+      summary: Get product details
