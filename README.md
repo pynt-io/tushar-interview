@@ -178,7 +178,7 @@ Commit your work, push, and open a PR.
 
 Use your AI assistant however you normally would — we want to see your real workflow.
 
-At the end of the session, export your AI conversation as a text or markdown file and add it to the repo:
+At the end of the session or before any clear conversation, export your AI conversation as a text or markdown file and add it to the repo:
 
 ```
 ai-conversation/
