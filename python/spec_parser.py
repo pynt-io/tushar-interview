@@ -8,14 +8,7 @@ import yaml
 from dataclasses import dataclass
 from typing import Optional
 from pathlib import Path
-
-
-@dataclass
-class Endpoint:
-    """A single API endpoint from the OpenAPI spec."""
-    path: str          # e.g., "/users/{userId}"
-    method: str        # e.g., "GET"
-    operation_id: Optional[str] = None
+from rules.endpoint import Endpoint
 
 
 def parse_spec(spec_path: str) -> list[Endpoint]:
