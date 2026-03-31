@@ -20,9 +20,10 @@ class BolaUser(Rules):
     def _is_rule_applicable(self, endpoint, headers=None):
         input_path = endpoint.path
         input_method = endpoint.method
-        
+
         pattern = re.escape(self.get_pattern()).replace(r'\{userId\}', r'(\w+)').replace(r'\*', r'.*')
         match = re.match(pattern, input_path)
+
         if match and input_method in self.get_applicable_method():
             return True
 

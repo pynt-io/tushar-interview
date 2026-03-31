@@ -19,9 +19,6 @@ class AuthByPass(Rules):
         input_path = endpoint.path
         input_method = endpoint.method
 
-        print(f"Checking applicability for endpoint: {endpoint.method} {endpoint.path}")
-        print(f"Rule pattern: {self.get_pattern()}, applicable methods: {self.get_applicable_method()}")
-
         pattern = re.escape(self.get_pattern()).replace(r'\*', r'.*')
         match = re.match(pattern, input_path)
 

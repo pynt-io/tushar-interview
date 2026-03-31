@@ -12,8 +12,6 @@ def load_rule_objects(rules_dir):
     rule_files = sorted(path for path in rules_dir.iterdir() if path.is_file())
 
     for rule_file in rule_files:
-        print(f"Rule file: {rule_file.stem}")
-
         if rule_file.suffix != ".yaml":
             continue
 
