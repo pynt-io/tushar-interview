@@ -1,12 +1,10 @@
 import yaml
-import os
 import re
 from .rules import Rules
 
 
 class AuthByPass(Rules):
-    def __init__(self):
-        yaml_path = os.path.join(os.path.dirname(__file__), '../../rules/auth_bypass.yaml')
+    def __init__(self, yaml_path):
         with open(yaml_path, 'r') as f:
             self.data = yaml.safe_load(f)
 
@@ -20,6 +18,9 @@ class AuthByPass(Rules):
     def _is_rule_applicable(self, endpoint, headers=None):
         input_path = endpoint.path
         input_method = endpoint.method
+
+        print(f"Checking applicability for endpoint: {endpoint.method} {endpoint.path}")
+        print(f"Rule pattern: {self.get_pattern()}, applicable methods: {self.get_applicable_method()}")
 
         pattern = re.escape(self.get_pattern()).replace(r'\*', r'.*')
         match = re.match(pattern, input_path)

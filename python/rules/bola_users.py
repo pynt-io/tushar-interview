@@ -1,13 +1,11 @@
 import yaml
-import os
 import re
 from .endpoint import Endpoint
 from .rules import Rules
 
 
 class BolaUser(Rules):
-    def __init__(self):
-        yaml_path = os.path.join(os.path.dirname(__file__), '../../rules/bola_users.yaml')
+    def __init__(self, yaml_path):
         with open(yaml_path, 'r') as file:
             self.data = yaml.safe_load(file)
 
