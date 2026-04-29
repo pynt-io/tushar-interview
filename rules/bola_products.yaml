@@ -1,0 +1,13 @@
+rule: BOLA-003
+name: "BOLA on Product Details"
+severity: medium
+target:
+  path_pattern: "/products/{productId}"
+  methods: [GET]
+mutations:
+  - type: parameter_swap
+    target: path.productId
+    strategy: increment    # enumerate adjacent product IDs
+detection:
+  - status_code: 200
+    body_contains: "price"

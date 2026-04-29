@@ -1,0 +1,13 @@
+rule: BOLA-002
+name: "BOLA on User Orders"
+severity: high
+target:
+  path_pattern: "/users/{userId}/orders"
+  methods: [GET]
+mutations:
+  - type: parameter_swap
+    target: path.userId
+    strategy: increment    # try accessing another user's order history
+detection:
+  - status_code: 200
+    body_contains: "orderId"
