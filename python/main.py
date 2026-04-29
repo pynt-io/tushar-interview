@@ -23,6 +23,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Directory where main.py lives — used to resolve relative CLI paths
+_SCRIPT_DIR = Path(__file__).parent.resolve()
+
+
+def _resolve(user_path: str) -> Path:
+    """
+    Resolve a CLI-supplied path robustly:
+      1. If it is absolute → use as-is.
+      2. If it exists relative to CWD → use that.
+      3. Otherwise fall back to resolving relative to the script directory.
+
+    This means `./rules` works whether you run:
+        python main.py ...                    (from inside python/)
+        python python/main.py ...             (from the parent folder)
+        python D:/full/path/main.py ...       (from anywhere)
+    """
+    p = Path(user_path)
+    if p.is_absolute():
+        return p
+    cwd_path = Path.cwd() / p
+    if cwd_path.exists():
+        return cwd_path.resolve()
+    return (_SCRIPT_DIR / p).resolve()
+
 
 def run_engine(rules_dir: str, spec_path: str) -> None:
     # ── 1. Parse OpenAPI spec ───────────────────────────────────────────
@@ -66,6 +90,7 @@ def _build_parser() -> argparse.ArgumentParser:
         epilog=(
             "Examples:\n"
             "  python main.py --rules ./rules --spec ./sample_specs/petstore.yaml\n"
+            "  python main.py --rules rules   --spec sample_specs/petstore.yaml\n"
         ),
     )
     p.add_argument(
@@ -86,14 +111,20 @@ def _build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = _build_parser().parse_args()
 
-    if not Path(args.rules).exists():
-        logger.error("Rules directory not found: %s", args.rules)
+    rules_path = _resolve(args.rules)
+    spec_path  = _resolve(args.spec)
+
+    logger.info("Resolved rules dir : %s", rules_path)
+    logger.info("Resolved spec file : %s", spec_path)
+
+    if not rules_path.exists():
+        logger.error("Rules directory not found: %s", rules_path)
         sys.exit(1)
-    if not Path(args.spec).exists():
-        logger.error("Spec file not found: %s", args.spec)
+    if not spec_path.exists():
+        logger.error("Spec file not found: %s", spec_path)
         sys.exit(1)
 
-    run_engine(args.rules, args.spec)
+    run_engine(str(rules_path), str(spec_path))
 
 
 if __name__ == "__main__":
