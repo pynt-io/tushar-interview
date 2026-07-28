@@ -1,0 +1,29 @@
+Loaded 2 rule(s) from ../rules
+  skipped invalid rule: invalid_rule.yaml: missing target.path_pattern
+Matched rules against 7 endpoint(s); generated 6 attack request(s).
+
+=== Generated Attack Requests ===
+
+AUTH-BYPASS-001  Authorization Header Bypass
+  GET   /admin/dashboard         | header_inject header.Authorization=""
+        headers: map[Authorization:]
+  GET   /admin/users             | header_inject header.Authorization=""
+        headers: map[Authorization:]
+
+BOLA-001  Broken Object Level Authorization
+  GET   /users/43                | parameter_swap increment on path.userId
+  GET   /users/41                | parameter_swap increment on path.userId
+  PUT   /users/43                | parameter_swap increment on path.userId
+  PUT   /users/41                | parameter_swap increment on path.userId
+
+No --target given; using in-process mock target at http://127.0.0.1:64093
+
+=== Detection Results ===
+AUTH-BYPASS-001  GET /admin/dashboard       VULNERABLE  status=200
+AUTH-BYPASS-001  GET /admin/users           VULNERABLE  status=200
+BOLA-001         GET /users/{userId}        VULNERABLE  status=200, body contains "email"
+BOLA-001         GET /users/{userId}        VULNERABLE  status=200, body contains "email"
+BOLA-001         PUT /users/{userId}        VULNERABLE  status=200, body contains "email"
+BOLA-001         PUT /users/{userId}        VULNERABLE  status=200, body contains "email"
+
+6/6 variant(s) flagged vulnerable.
