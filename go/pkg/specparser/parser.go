@@ -9,9 +9,9 @@ import (
 )
 
 type Endpoint struct {
-	Path        string 
-	Method      string 
-	OperationID string 
+	Path        string
+	Method      string
+	OperationID string
 }
 
 func (e Endpoint) String() string {
@@ -61,7 +61,6 @@ func ParseSpec(specPath string) ([]Endpoint, error) {
 
 	return endpoints, nil
 }
-
 
 type openAPISpec struct {
 	Paths map[string]map[string]*operationDetails `yaml:"paths"`
