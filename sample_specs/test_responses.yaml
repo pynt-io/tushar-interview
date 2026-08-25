@@ -1,0 +1,26 @@
+# Predefined responses for testing the rule engine
+# Maps endpoint paths to response objects with status_code and body
+
+"/users/{userId}":
+  status_code: 200
+  body: "user data"
+
+"/users/{userId}/orders":
+  status_code: 200
+  body: "user orders data"
+
+"/admin/dashboard":
+  status_code: 200
+  body: "admin dashboard data"
+
+"/admin/users":
+  status_code: 200
+  body: "admin users list"
+
+"/products":
+  status_code: 200
+  body: "products list"
+
+"/products/{productId}":
+  status_code: 200
+  body: "product details"

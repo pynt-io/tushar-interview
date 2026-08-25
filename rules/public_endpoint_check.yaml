@@ -1,0 +1,28 @@
+rule_id: PUBLIC_ENDPOINT_CHECK
+name: Public Endpoint Availability Check
+description: Verifies public endpoints are accessible and respond correctly
+severity: INFO
+
+match:
+  path_patterns:
+    - "/products"
+    - "/products/*"
+  methods:
+    - GET
+
+mutations:
+  - type: add_header
+    header: "X-Test-Header"
+    value: "security_test"
+
+response_checks:
+  - type: status_code
+    operator: "=="
+    expected: 200
+    vulnerability: "NONE"
+    message: "Public endpoint is accessible"
+  - type: status_code
+    operator: "=="
+    expected: 404
+    vulnerability: "ENDPOINT_MISSING"
+    message: "Public endpoint returns 404 - may be misconfigured"

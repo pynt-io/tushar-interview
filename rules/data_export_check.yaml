@@ -1,0 +1,32 @@
+rule_id: DATA_EXPORT_CHECK
+name: Data Export Endpoint Check
+description: Detects data export endpoints that could expose large amounts of sensitive data
+severity: CRITICAL
+
+match:
+  path_patterns:
+    - "/export"
+    - "/download"
+    - "/backup"
+    - "/admin/export"
+    - "/admin/download"
+  methods:
+    - GET
+    - POST
+
+mutations:
+  - type: add_header
+    header: "Accept"
+    value: "application/json"
+
+response_checks:
+  - type: status_code
+    operator: "=="
+    expected: 200
+    vulnerability: "DATA_EXPORT_EXPOSED"
+    message: "Data export endpoint is accessible without proper access control"
+  - type: body_contains
+    operator: "contains"
+    pattern: "export"
+    vulnerability: "DATA_EXPORT_EXPOSED"
+    message: "Endpoint appears to initiate data export without proper authorization"

@@ -1,0 +1,188 @@
+openapi: "3.0.3"
+info:
+  title: "Vulnerable API for Security Testing"
+  version: "1.0.0"
+  description: "An API specification with intentional security vulnerabilities for testing the rule engine"
+paths:
+  # Vulnerability: Exposed admin endpoint without proper authentication
+  /admin/config:
+    get:
+      operationId: getAdminConfig
+      summary: Get admin configuration
+      description: "VULNERABILITY: Admin endpoint exposed without authentication"
+      responses:
+        '200':
+          description: Configuration data returned
+    post:
+      operationId: updateAdminConfig
+      summary: Update admin configuration
+      description: "VULNERABILITY: Admin endpoint allows modification without authorization"
+      responses:
+        '200':
+          description: Configuration updated
+
+  # Vulnerability: IDOR - User data accessible by ID without proper authorization
+  /users/{userId}:
+    get:
+      operationId: getUserById
+      summary: Get user by ID
+      description: "VULNERABILITY: Potential IDOR - users can access other users' data"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User data returned
+    put:
+      operationId: updateUserById
+      summary: Update user by ID
+      description: "VULNERABILITY: Potential IDOR - users can modify other users' data"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User updated
+    delete:
+      operationId: deleteUserById
+      summary: Delete user by ID
+      description: "VULNERABILITY: Potential IDOR - users can delete other users"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deleted
+
+  # Vulnerability: IDOR - User orders accessible without ownership check
+  /users/{userId}/orders:
+    get:
+      operationId: getUserOrders
+      summary: Get user orders
+      description: "VULNERABILITY: Potential IDOR - can access any user's orders"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Orders returned
+
+  # Vulnerability: Exposed sensitive user information
+  /users/{userId}/profile:
+    get:
+      operationId: getUserProfile
+      summary: Get user profile with sensitive data
+      description: "VULNERABILITY: Exposes sensitive profile information without proper access control"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Profile data returned including sensitive information
+
+  # Vulnerability: Admin user management endpoint
+  /admin/users:
+    get:
+      operationId: listAllUsers
+      summary: List all users (admin only)
+      description: "VULNERABILITY: Admin endpoint that should be protected but may be exposed"
+      responses:
+        '200':
+          description: All users listed
+    post:
+      operationId: createUser
+      summary: Create new user (admin only)
+      description: "VULNERABILITY: User creation without proper authorization checks"
+      responses:
+        '201':
+          description: User created
+
+  # Vulnerability: Exposed system information
+  /system/info:
+    get:
+      operationId: getSystemInfo
+      summary: Get system information
+      description: "VULNERABILITY: Exposes system information that could aid attacks"
+      responses:
+        '200':
+          description: System information returned
+
+  # Vulnerability: Debug endpoint exposed
+  /debug/stacktrace:
+    get:
+      operationId: getStackTrace
+      summary: Get stack trace for debugging
+      description: "VULNERABILITY: Debug endpoint exposed in production"
+      responses:
+        '200':
+          description: Stack trace returned
+
+  # Normal public endpoints (for comparison)
+  /products:
+    get:
+      operationId: listProducts
+      summary: List all products
+      description: "Public endpoint for listing products"
+      responses:
+        '200':
+          description: Products listed
+
+  /products/{productId}:
+    get:
+      operationId: getProduct
+      summary: Get product details
+      description: "Public endpoint for product details"
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product details returned
+
+  # Vulnerability: Payment endpoint without proper validation
+  /payments:
+    post:
+      operationId: processPayment
+      summary: Process payment
+      description: "VULNERABILITY: Payment processing without proper security controls"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                cardNumber:
+                  type: string
+      responses:
+        '200':
+          description: Payment processed
+
+  # Vulnerability: Export endpoint that could expose all data
+  /admin/export:
+    get:
+      operationId: exportAllData
+      summary: Export all system data
+      description: "VULNERABILITY: Data export endpoint without proper access control"
+      responses:
+        '200':
+          description: Data export initiated

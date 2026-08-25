@@ -1,0 +1,30 @@
+rule_id: SYSTEM_INFO_CHECK
+name: System Information Exposure Check
+description: Detects exposed system information endpoints that could aid attackers
+severity: MEDIUM
+
+match:
+  path_patterns:
+    - "/system/*"
+    - "/info"
+    - "/health"
+  methods:
+    - GET
+    - POST
+
+mutations:
+  - type: add_header
+    header: "X-Forwarded-For"
+    value: "attacker.ip"
+
+response_checks:
+  - type: status_code
+    operator: "=="
+    expected: 200
+    vulnerability: "SYSTEM_INFO_EXPOSED"
+    message: "System information endpoint is accessible and exposes sensitive system details"
+  - type: body_contains
+    operator: "contains"
+    pattern: "version"
+    vulnerability: "SYSTEM_INFO_EXPOSED"
+    message: "Response contains version information that could aid fingerprinting"
