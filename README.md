@@ -73,7 +73,7 @@ We'd rather see a code **that runs end-to-end on the test data** with fewer feat
 
 ## **When You're Done**
 
-Commit your work, push, and open a PR.
+Commit your work to a new branch, push, and open a PR.
 If git actions are not available for you, you can zip your code and submit it as an attachment.
 
 ---
