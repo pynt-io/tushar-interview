@@ -25,12 +25,8 @@ The existing spec and spec parser are just there to help you understand the requ
 
 **In your PR description, include:**
 
-- How to run your tool (the command)
-- Anything you'd do differently with more time
-
-## Working with AI
-
-Use your AI assistant however you normally would — we want to see your real workflow.
+- updated files
+- exported AI conversation
 
 At the end of the session or before any clear conversation, export your AI conversation as a text or markdown file and add it to the repo:
 
@@ -61,6 +57,7 @@ Given a directory of YAML rule files and an API endpoint, the engine should:
 
 **Expected usage:**
 
+example run with sample data:
 ```
 python main.py --rules ./rules --spec ./sample_specs/petstore.yaml
 ```
@@ -78,7 +75,6 @@ We'd rather see a code **that runs end-to-end on the test data** with fewer feat
 
 Commit your work, push, and open a PR.
 If git actions are not available for you, you can zip your code and submit it as an attachment.
-
 
 ---
 
