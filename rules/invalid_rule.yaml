@@ -1,9 +1,0 @@
-rule: BAD-001
-name: "Missing target field"
-severity: medium
-mutations:
-  - type: parameter_swap
-    target: path.id
-    strategy: increment
-detection:
-  - status_code: 200
