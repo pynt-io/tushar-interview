@@ -1,0 +1,32 @@
+rule_id: DEBUG_ENDPOINT_CHECK
+name: Debug Endpoint Exposure Check
+description: Detects exposed debug endpoints that should not be accessible in production
+severity: HIGH
+
+match:
+  path_patterns:
+    - "/debug/*"
+    - "/test/*"
+    - "/dev/*"
+  methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+
+mutations:
+  - type: add_header
+    header: "X-Debug-Mode"
+    value: "true"
+
+response_checks:
+  - type: status_code
+    operator: "=="
+    expected: 200
+    vulnerability: "DEBUG_ENDPOINT_EXPOSED"
+    message: "Debug endpoint is accessible in production environment"
+  - type: body_contains
+    operator: "contains"
+    pattern: "stack"
+    vulnerability: "DEBUG_ENDPOINT_EXPOSED"
+    message: "Debug endpoint exposes stack traces or implementation details"

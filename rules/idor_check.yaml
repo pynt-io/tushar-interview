@@ -1,0 +1,33 @@
+rule_id: IDOR_CHECK
+name: Insecure Direct Object Reference Check
+description: Tests for IDOR vulnerabilities by manipulating user IDs
+severity: CRITICAL
+
+match:
+  path_patterns:
+    - "/users/{userId}/*"
+    - "/users/{userId}"
+  methods:
+    - GET
+    - PUT
+    - DELETE
+
+mutations:
+  - type: replace_path_param
+    param: "userId"
+    value: "999999"
+  - type: replace_path_param
+    param: "userId"
+    value: "1"
+
+response_checks:
+  - type: status_code
+    operator: "=="
+    expected: 200
+    vulnerability: "POTENTIAL_IDOR"
+    message: "Successfully accessed another user's data - possible IDOR vulnerability"
+  - type: body_contains
+    pattern: "unauthorized"
+    operator: "not_contains"
+    vulnerability: "POTENTIAL_IDOR"
+    message: "Response doesn't indicate authorization check failed"

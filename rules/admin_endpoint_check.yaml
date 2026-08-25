@@ -1,0 +1,36 @@
+rule_id: ADMIN_ENDPOINT_CHECK
+name: Admin Endpoint Exposure Check
+description: Detects exposed admin endpoints that should be protected
+severity: HIGH
+
+# Matching criteria - which endpoints this rule applies to
+match:
+  path_patterns:
+    - "/admin/*"
+  methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+
+# Request mutations - how to modify the request for testing
+mutations:
+  - type: replace_header
+    header: "X-Auth-Token"
+    value: "invalid_token"
+  - type: replace_header
+    header: "Authorization"
+    value: "Bearer invalid_token"
+
+# Response analysis - how to detect vulnerabilities
+response_checks:
+  - type: status_code
+    operator: "!="
+    expected: 401
+    vulnerability: "ADMIN_ENDPOINT_EXPOSED"
+    message: "Admin endpoint accessible without valid authentication"
+  - type: status_code
+    operator: "!="
+    expected: 403
+    vulnerability: "ADMIN_ENDPOINT_EXPOSED"
+    message: "Admin endpoint accessible without proper authorization"

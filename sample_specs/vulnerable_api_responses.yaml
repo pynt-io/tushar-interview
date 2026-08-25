@@ -1,0 +1,46 @@
+# Predefined responses for the vulnerable API spec
+# These responses simulate a vulnerable API where security controls are not properly implemented
+
+"/admin/config":
+  status_code: 200
+  body: "configuration data with sensitive settings"
+
+"/admin/users":
+  status_code: 200
+  body: "list of all users including sensitive information"
+
+"/users/{userId}":
+  status_code: 200
+  body: "user data including personal information"
+
+"/users/{userId}/orders":
+  status_code: 200
+  body: "user orders with payment information"
+
+"/users/{userId}/profile":
+  status_code: 200
+  body: "user profile with sensitive personal data"
+
+"/system/info":
+  status_code: 200
+  body: "system version, database details, server information"
+
+"/debug/stacktrace":
+  status_code: 200
+  body: "full stack trace with internal implementation details"
+
+"/products":
+  status_code: 200
+  body: "list of public products"
+
+"/products/{productId}":
+  status_code: 200
+  body: "product details"
+
+"/payments":
+  status_code: 200
+  body: "payment processed without proper validation"
+
+"/admin/export":
+  status_code: 200
+  body: "data export initiated - all user data being exported"
